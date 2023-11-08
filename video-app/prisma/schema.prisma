@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Codes {
+  id          Int      @id @default(autoincrement())
+  created_at  DateTime @default(now())
+  companyID   String
+  lineItemID  String
+  price       Float
+  name        String
+  description String
+  code        String
+
+  @@unique([name, companyID])
+}
+
+model purchases {
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now())
+  lineItemID String
+  userID     String
+  codeId     Int
+
+  @@index([codeId])
+}
+
+model videos {
+  id         Int       @id @default(autoincrement())
+  video_id   String    @db.VarChar(255)
+  video_url  String    @db.VarChar(255)
+  company_id String    @db.VarChar(255)
+  video_type String    @db.VarChar(255)
+  product_id String    @unique @db.VarChar(255)
+  created_at DateTime? @default(now()) @db.Timestamp(6)
+}
